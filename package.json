@@ -1,0 +1,39 @@
+{
+  "name": "solana-x402-facilitator",
+  "version": "0.1.0",
+  "description": "x402 payment facilitator for Solana \u2014 first ever implementation",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./middleware": "./middleware.js",
+    "./verify": "./verify.js",
+    "./settle": "./settle.js"
+  },
+  "scripts": {
+    "test": "node test-client.js",
+    "start": "node example-server.js"
+  },
+  "dependencies": {
+    "@solana/web3.js": "^1.98.4",
+    "@solana/spl-token": "^0.4.14",
+    "bs58": "^5.0.0",
+    "tweetnacl": "^1.0.3"
+  },
+  "keywords": [
+    "x402",
+    "solana",
+    "micropayments",
+    "ai-agents",
+    "machine-to-machine"
+  ],
+  "author": "Tom Smart <tomsmart@smartflowpro.ai>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tomsmart-ai/solana-x402-facilitator"
+  },
+  "homepage": "https://github.com/tomsmart-ai/solana-x402-facilitator#readme",
+  "bugs": {
+    "url": "https://github.com/tomsmart-ai/solana-x402-facilitator/issues"
+  }
+}
