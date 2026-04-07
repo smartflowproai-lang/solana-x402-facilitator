@@ -1,6 +1,9 @@
 # solana-x402-facilitator
 
-**The first x402 payment facilitator for Solana.**
+[![npm](https://img.shields.io/npm/v/solana-x402-facilitator)](https://www.npmjs.com/package/solana-x402-facilitator)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE.md)
+
+**Open source x402 payment facilitator for Solana.**
 
 x402 is the HTTP 402 Payment Required standard for machine-to-machine micropayments (Linux Foundation). Until now, it only worked on EVM chains (Base, Ethereum). This package brings x402 to Solana.
 
@@ -64,5 +67,11 @@ Low-level payment verification.
 ### `settlePayment(tx, connection, opts)`
 Low-level on-chain settlement.
 
+## SmartFlow Ecosystem
+
+- [n8n-nodes-x402](https://github.com/smartflowproai-lang/n8n-nodes-x402) — accept & send x402 payments in n8n (no code)
+- [SmartFlow Signal API](https://smartflowproai.com) — x402-powered trading signals
+- [PQS Leaderboard](https://api.smartflowproai.com/pqs/leaderboard) — transparent quality scoring for signal providers
+
 ## License
-MIT — Built by Tom Smart (@tomsmart_ai)
+MIT — Built by Tom Smart ([@TomSmart_ai](https://x.com/TomSmart_ai))
