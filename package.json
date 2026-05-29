@@ -1,7 +1,7 @@
 {
   "name": "solana-x402-facilitator",
-  "version": "0.1.0",
-  "description": "x402 payment facilitator for Solana \u2014 first ever implementation",
+  "version": "0.1.1",
+  "description": "Open-source x402 payment facilitator for Solana — verify, settle, Express middleware. USDC micropayments for AI agents.",
   "main": "index.js",
   "exports": {
     ".": "./index.js",
