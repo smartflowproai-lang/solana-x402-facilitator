@@ -7,6 +7,29 @@ const bs58 = require("bs58");
 const USDC_MINT = new PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v");
 // USDC decimals on Solana = 6
 const USDC_DECIMALS = 6;
+const ACCOUNT_INFO_TIMEOUT_MS = 10_000;
+
+function getPaymentPayload(rawPayload) {
+  if (
+    rawPayload &&
+    rawPayload.x402Version === 2 &&
+    rawPayload.scheme === "exact" &&
+    rawPayload.payload
+  ) {
+    return rawPayload.payload;
+  }
+
+  return rawPayload;
+}
+
+function withTimeout(promise, timeoutMs, label) {
+  let timeoutId;
+  const timeout = new Promise((_, reject) => {
+    timeoutId = setTimeout(() => reject(new Error(`${label} timed out`)), timeoutMs);
+  });
+
+  return Promise.race([promise, timeout]).finally(() => clearTimeout(timeoutId));
+}
 
 /**
  * Verify an x402 payment header for Solana
@@ -18,7 +41,8 @@ const USDC_DECIMALS = 6;
 async function verifyPayment(paymentHeader, requirements, connection) {
   try {
     // Decode payment header
-    const payload = JSON.parse(Buffer.from(paymentHeader, "base64").toString());
+    const decodedPayload = JSON.parse(Buffer.from(paymentHeader, "base64").toString());
+    const payload = getPaymentPayload(decodedPayload);
     
     if (!payload.transaction || !payload.payer) {
       return { valid: false, reason: "Missing transaction or payer in payment payload" };
@@ -91,13 +115,16 @@ async function verifyPayment(paymentHeader, requirements, connection) {
     // Verify USDC mint (source account's mint)
     const sourceAccount = transferIx.keys[0].pubkey;
     try {
-      const accountInfo = await connection.getParsedAccountInfo(sourceAccount);
+      const accountInfo = await withTimeout(
+        connection.getParsedAccountInfo(sourceAccount),
+        ACCOUNT_INFO_TIMEOUT_MS,
+        "Source token account lookup"
+      );
       if (accountInfo.value?.data?.parsed?.info?.mint !== USDC_MINT.toBase58()) {
         return { valid: false, reason: "Source token account is not USDC" };
       }
     } catch (e) {
-      // If we can't verify mint on-chain, log warning but don't fail
-      console.warn("[x402-sol] Could not verify source mint on-chain:", e.message);
+      return { valid: false, reason: `Could not verify source mint on-chain: ${e.message}` };
     }
 
     return {

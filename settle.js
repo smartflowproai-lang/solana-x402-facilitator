@@ -1,5 +1,21 @@
 const { Connection, sendAndConfirmTransaction } = require("@solana/web3.js");
 
+const settledSignatures = new Map();
+const REPLAY_CACHE_TTL_MS = 60 * 60 * 1000;
+
+function getTransactionSignature(tx) {
+  const signer = tx.signatures.find(s => s.signature);
+  return signer?.signature ? Buffer.from(signer.signature).toString("base64") : null;
+}
+
+function pruneReplayCache(now = Date.now()) {
+  for (const [signature, timestamp] of settledSignatures.entries()) {
+    if (now - timestamp > REPLAY_CACHE_TTL_MS) {
+      settledSignatures.delete(signature);
+    }
+  }
+}
+
 /**
  * Settle a verified x402 payment on Solana
  * @param {Transaction} tx - verified transaction
@@ -9,6 +25,27 @@ const { Connection, sendAndConfirmTransaction } = require("@solana/web3.js");
  */
 async function settlePayment(tx, connection, opts = {}) {
   const commitment = opts.commitment || "confirmed";
+  const replayKey = getTransactionSignature(tx);
+  const now = Date.now();
+  pruneReplayCache(now);
+
+  if (!replayKey) {
+    return {
+      success: false,
+      signature: null,
+      reason: "Transaction is missing a signature"
+    };
+  }
+
+  if (settledSignatures.has(replayKey)) {
+    return {
+      success: false,
+      signature: null,
+      reason: "Payment signature has already been used"
+    };
+  }
+
+  settledSignatures.set(replayKey, now);
   
   try {
     // Transaction is already signed by the payer
