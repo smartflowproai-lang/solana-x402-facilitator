@@ -26,14 +26,14 @@
     "ai-agents",
     "machine-to-machine"
   ],
-  "author": "Tom Smart <tomsmart@smartflowpro.ai>",
+  "author": "Tom Smart <info@smartflowproai.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tomsmart-ai/solana-x402-facilitator"
+    "url": "https://github.com/smartflowproai-lang/solana-x402-facilitator"
   },
-  "homepage": "https://github.com/tomsmart-ai/solana-x402-facilitator#readme",
+  "homepage": "https://github.com/smartflowproai-lang/solana-x402-facilitator#readme",
   "bugs": {
-    "url": "https://github.com/tomsmart-ai/solana-x402-facilitator/issues"
+    "url": "https://github.com/smartflowproai-lang/solana-x402-facilitator/issues"
   }
 }
