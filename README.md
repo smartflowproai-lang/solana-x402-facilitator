@@ -1,3 +1,5 @@
+> **⚠️ Archived — self-hosted example code only.** This repository is archived and provided as open-source, self-hosted example code. SmartFlow does not operate this as a hosted service, facilitator, relayer, settlement or payment service for customers, does not hold customer funds or private keys, and does not run, submit or settle transactions on anyone's behalf.
+
 # solana-x402-facilitator
 
 [![npm](https://img.shields.io/npm/v/solana-x402-facilitator)](https://www.npmjs.com/package/solana-x402-facilitator)
